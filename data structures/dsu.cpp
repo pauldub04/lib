@@ -18,6 +18,8 @@ struct Dsu {
     void connect(ll a, ll b) {
         a = get_root(a);
         b = get_root(b);
+        if (a == b)
+        	return;
 
         if (s[a] > s[b])
             swap(a, b);
