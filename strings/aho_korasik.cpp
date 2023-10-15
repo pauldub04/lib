@@ -25,8 +25,8 @@ const int inf = 1e9, mod = 1e9+7, N = 1e5, LG = 30;
 const ll INF = 1e18;
 const ld eps = 1e-9;
 
-const int alphabetSize = 26;
-const int neutral = -1;
+const int ALPHABET = 26;
+const int NEUTRAL = -1;
 
 struct Trie {
     struct Node {
@@ -41,11 +41,11 @@ struct Trie {
         int terminalSuffixCount;    // сколько заканчивается строк во всех суффиксах
 
         Node() {
-            to.assign(alphabetSize, neutral);
-            go.assign(alphabetSize, neutral);
+            to.assign(ALPHABET, NEUTRAL);
+            go.assign(ALPHABET, NEUTRAL);
             terminal = terminalPrefixCount = terminalSuffixCount = 0;
             depth = 0;
-            link = linkTerminal = neutral;
+            link = linkTerminal = NEUTRAL;
         }
 
         inline int& getTo(char c) {
@@ -71,7 +71,7 @@ struct Trie {
     void addString(const string& s) {
         int v = root;
         for (auto c : s) {
-            if (trie[v].getTo(c) == neutral) {
+            if (trie[v].getTo(c) == NEUTRAL) {
                 trie[v].getTo(c) = createNode();
             }
             ++trie[v].terminalPrefixCount;
@@ -85,8 +85,8 @@ struct Trie {
         trie[root].link = 0;            // это не совсем правда
         trie[root].linkTerminal = 0;    // это не совсем правда
         trie[root].depth = 0;
-        for (int c = 0; c < alphabetSize; ++c) {
-            if (trie[root].to[c] == neutral) {
+        for (int c = 0; c < ALPHABET; ++c) {
+            if (trie[root].to[c] == NEUTRAL) {
                 trie[root].go[c] = root;
             } else {
                 trie[root].go[c] = trie[root].to[c];
@@ -97,9 +97,9 @@ struct Trie {
         while (!q.empty()) {
             int v = q.front(); q.pop();
 
-            for (int c = 0; c < alphabetSize; ++c) {
+            for (int c = 0; c < ALPHABET; ++c) {
                 int u = trie[v].to[c];
-                if (u == neutral) {
+                if (u == NEUTRAL) {
                     continue;
                 }
                 trie[u].depth = trie[v].depth + 1;
@@ -118,8 +118,8 @@ struct Trie {
 
                 trie[u].terminalSuffixCount = trie[u].terminal + trie[trie[u].link].terminalSuffixCount;
 
-                for (int d = 0; d < alphabetSize; ++d) {
-                    if (trie[u].to[d] == neutral) {
+                for (int d = 0; d < ALPHABET; ++d) {
+                    if (trie[u].to[d] == NEUTRAL) {
                         trie[u].go[d] = trie[trie[u].link].go[d];
                     } else {
                         trie[u].go[d] = trie[u].to[d];
@@ -130,37 +130,49 @@ struct Trie {
         }
     }
 
+    Node& operator[](size_t idx) {
+        return trie[idx];
+    }
+
     vector<Node> trie;
     int root;
 };
 
 int solve(ll tc) {
-    Trie t;
-    t.addString("kek");
-    t.addString("lol");
-    t.addString("abc");
-    t.buildAhoKorasik();
+    Trie trie;
+    trie.addString("kek");
+    trie.addString("lol");
+    trie.addString("abc");
+    trie.addString("ab");
+    trie.buildAhoKorasik();
 
-    string s = "sodiabcjipflolguabhsdkekfgjkekekdgf";
+    string s = "sodiabcjipflolguabhsdkekfgjkekekdgflol";
+//                       |||    |||  ||         ^^^^^   |||     kek
+//                       |||    ^^^  ||                 ^^^     lol
+//                       ^^^         ||                         abc
+//                       ^^          ^^                         ab
+
     int totalCount = 0;
+    int curState = trie.root;
 
-    int cur = t.root;
     for (int i = 0; i < sz(s); ++i) {
-        cur = t.trie[cur].getGo(s[i]);
+        curState = trie[curState].getGo(s[i]);
 
-        int pos = cur;
-        while (pos != t.root) {
-            if (t.trie[pos].terminal) {
-                int startPos = i - t.trie[pos].depth + 1;
-                cout << "startPos = " << startPos << "; found: " << s.substr(startPos, t.trie[pos].depth) << "\n";
+        int pos = curState;
+        while (pos != trie.root) {
+            if (trie[pos].terminal) {
+                int startPos = i - trie[pos].depth + 1;
+                cout << "startPos = " << startPos << ";";
+                cout << "\tfound: " << s.substr(startPos, trie[pos].depth) << "\n";
             }
-            pos = t.trie[pos].linkTerminal;
+            pos = trie[pos].linkTerminal;
         }
 
-        totalCount += t.trie[cur].terminalSuffixCount;
+        totalCount += trie[curState].terminalSuffixCount;
     }
 
     cout << "totalCount: " << totalCount << "\n";
+
 
     return 0;
 }
