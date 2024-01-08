@@ -37,8 +37,8 @@ struct Trie {
 
         int depth;                  // глубина вершины, не нужна для алгоса
         int terminal;               // сколько здесь заканчивается строк
-        int terminalPrefixCount;    // сколько заканчивается строк во всех префиксах
-        int terminalSuffixCount;    // сколько заканчивается строк во всех суффиксах
+        int terminalPrefixCount;    // сколько терминальных в этом поддереве
+        int terminalSuffixCount;    // сколько терминальных на пути по суфф ссылкам до корня
 
         Node() {
             to.assign(ALPHABET, NEUTRAL);
