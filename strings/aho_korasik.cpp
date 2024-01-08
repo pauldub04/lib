@@ -82,8 +82,8 @@ struct Trie {
     }
 
     void buildAhoKorasik() {
-        trie[root].link = 0;            // это не совсем правда
-        trie[root].linkTerminal = 0;    // это не совсем правда
+        trie[root].link = root;            // это не совсем правда
+        trie[root].linkTerminal = root;    // это не совсем правда
         trie[root].depth = 0;
         for (int c = 0; c < ALPHABET; ++c) {
             if (trie[root].to[c] == NEUTRAL) {
@@ -93,7 +93,7 @@ struct Trie {
             }
         }
 
-        queue<int> q; q.push(0);
+        queue<int> q; q.push(root);
         while (!q.empty()) {
             int v = q.front(); q.pop();
 
