@@ -51,7 +51,7 @@ void upd(int l, int r, int val, int x=0, int lx=0, int rx=N) {
         return;
     }
     if (l <= lx && rx <= r) {
-        tree[x] += val;
+        add[x] += val;
         push(x);
         return;
     }
