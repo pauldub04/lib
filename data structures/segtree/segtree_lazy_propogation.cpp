@@ -1,19 +1,27 @@
-vector<int> add, tree;
+struct Segment {
+    int max_val;
+    int max_pos;
+};
 
+vector<Segment> tree;
 const int base_tree = 0;
 const int neutral_tree = -inf;
 
+vector<int> add;
 const int base_add = 0;
-const int neutral_add = 0;
 
-inline int func(int x, int y) {
-    return max(x, y);
+inline Segment func(const Segment& x, const Segment& y) {
+    if (x.max_val > y.max_val) {
+        return x;
+    } else {
+        return y;
+    }
 }
 
 void build(int x=0, int lx=0, int rx=N) {
     if (rx-lx == 1) {
-        tree[lx] = base_tree;
-        add[lx] = base_add;
+        tree[x] = {base_tree, lx};
+        add[x] = base_add;
         return;
     }
     int m = (lx+rx)/2;
@@ -23,23 +31,25 @@ void build(int x=0, int lx=0, int rx=N) {
 }
 
 void push(int x) {
-    if (add[x] == neutral_add) {
+    if (add[x] == base_add) {
         return;
     }
-    tree[x] += add[x];
+    tree[x].max_val += add[x];
     for (int i : {1, 2}) {
-        add[2*x+i] += add[x];
+        if (2*x+i < sz(add)) {
+            add[2*x+i] += add[x];
+        }
     }
     add[x] = base_add;
 }
 
-int ans(int l, int r, int x=0, int lx=0, int rx=N) {
+Segment ans(int l, int r, int x=0, int lx=0, int rx=N) {
     push(x);
     if (l <= lx && rx <= r) {
         return tree[x];
     }
     if (lx >= r || l >= rx) {
-        return neutral_tree;
+        return {neutral_tree, -1};
     }
     int m = (lx+rx)/2;
     return func(ans(l, r, 2*x+1, lx, m), ans(l, r, 2*x+2, m, rx));
