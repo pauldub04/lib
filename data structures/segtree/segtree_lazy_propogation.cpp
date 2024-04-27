@@ -1,3 +1,4 @@
+// максимум с позицией
 struct Segment {
     int max_val;
     int max_pos;
@@ -43,7 +44,7 @@ void push(int x) {
     add[x] = base_add;
 }
 
-Segment ans(int l, int r, int x=0, int lx=0, int rx=N) {
+Segment get(int l, int r, int x=0, int lx=0, int rx=N) {
     push(x);
     if (l <= lx && rx <= r) {
         return tree[x];
@@ -52,7 +53,7 @@ Segment ans(int l, int r, int x=0, int lx=0, int rx=N) {
         return {neutral_tree, -1};
     }
     int m = (lx+rx)/2;
-    return func(ans(l, r, 2*x+1, lx, m), ans(l, r, 2*x+2, m, rx));
+    return func(get(l, r, 2*x+1, lx, m), get(l, r, 2*x+2, m, rx));
 }
 
 void upd(int l, int r, int val, int x=0, int lx=0, int rx=N) {
