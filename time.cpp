@@ -9,6 +9,12 @@
 #pragma GCC optimize("Ofast,unroll-loops")
 #pragma GCC target("avx2,tune=native")
 
+// or
+
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize ("unroll-loops")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+
 #define debug(...) fprintf(stderr, __VA_ARGS__), fflush(stderr)
 int main() {
     IOS;
