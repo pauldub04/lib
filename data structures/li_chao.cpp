@@ -13,10 +13,10 @@ typedef string str;
 // #define rand(l, r) uniform_int_distribution<ll>(l, r)(rng)
 
 #define IOS ios::sync_with_stdio(false); cin.tie(nullptr)
-#define vin(x_points) {for (auto& _ : (x_points)) {cin >> _;}}
-#define vout(x_points) {for (auto _ : (x_points)) {cout << _ << " ";} cout << "\n";}
+#define vin(query_points) {for (auto& _ : (query_points)) {cin >> _;}}
+#define vout(query_points) {for (auto _ : (query_points)) {cout << _ << " ";} cout << "\n";}
 #define all(x) (x).begin(), (x).end()
-#define sz(x_points) int((x_points).size())
+#define sz(query_points) int((query_points).size())
 
 #define F first
 #define S second
@@ -37,12 +37,12 @@ struct Line {
  
 // li chao
 vector<Line> tree;
-vll x_points;
+vll query_points;
  
-void add_line(Line cur, ll x=0, ll lx=0, ll rx=sz(x_points)) {
+void add_line(Line cur, ll x=0, ll lx=0, ll rx=sz(query_points)) {
     ll m = (lx+rx)/2;
-    bool left = cur.get(x_points[lx]) < tree[x].get(x_points[lx]);
-    bool mid = cur.get(x_points[m]) < tree[x].get(x_points[m]);
+    bool left = cur.get(query_points[lx]) < tree[x].get(query_points[lx]);
+    bool mid = cur.get(query_points[m]) < tree[x].get(query_points[m]);
     if (mid) {
         swap(tree[x], cur);
     }
@@ -57,23 +57,23 @@ void add_line(Line cur, ll x=0, ll lx=0, ll rx=sz(x_points)) {
     }
 }
  
-ll get_ans(ll i, ll x=0, ll lx=0, ll rx=sz(x_points)) {
+ll get_ans(ll i, ll x=0, ll lx=0, ll rx=sz(query_points)) {
     if (rx-lx == 1) {
-        return tree[x].get(x_points[i]);
+        return tree[x].get(query_points[i]);
     }
  
     ll m = (lx+rx)/2;
     if (i < m) {
-        return min(tree[x].get(x_points[i]), get_ans(i, 2*x+1, lx, m));
+        return min(tree[x].get(query_points[i]), get_ans(i, 2*x+1, lx, m));
     } else {
-        return min(tree[x].get(x_points[i]), get_ans(i, 2*x+2, m, rx));
+        return min(tree[x].get(query_points[i]), get_ans(i, 2*x+2, m, rx));
     }
 }
 
 
 int solve() {
     ll n; cin >> n;
-    x_points.resize(n); vin(x_points);
+    query_points.resize(n); vin(query_points);
     vll b(n); vin(b);
  
     tree.resize(4*n, {0, INF});
