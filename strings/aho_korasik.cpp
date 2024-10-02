@@ -147,10 +147,10 @@ int solve(ll tc) {
     trie.buildAhoKorasik();
 
     string s = "sodiabcjipflolguabhsdkekfgjkekekdgflol";
-//                       |||    |||  ||         ^^^^^   |||     kek
-//                       |||    ^^^  ||                 ^^^     lol
-//                       ^^^         ||                         abc
-//                       ^^          ^^                         ab
+//                  |||    |||  ||         ^^^^^   |||     kek
+//                  |||    ^^^  ||                 ^^^     lol
+//                  ^^^         ||                         abc
+//                  ^^          ^^                         ab
 
     int totalCount = 0;
     int curState = trie.root;
